@@ -309,7 +309,6 @@ public abstract class MainController {
                         try {
                             existingNumbers.add(Integer.parseInt(id.substring(prefix.length())));
                         } catch (NumberFormatException e) {
-                            // Ignore
                         }
                     }
                 }
