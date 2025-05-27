@@ -57,7 +57,6 @@ public abstract class MainController {
     protected DateTimeFormatter csvDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static String currentGardenForPlantAdd;
 
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -309,6 +308,7 @@ public abstract class MainController {
                         try {
                             existingNumbers.add(Integer.parseInt(id.substring(prefix.length())));
                         } catch (NumberFormatException e) {
+                            // Ignore
                         }
                     }
                 }
@@ -327,12 +327,18 @@ public abstract class MainController {
         return String.format("%s%04d", prefix, nextNumber);
     }
 
-    protected boolean updateCsvRecord(String filePath, String recordID, int idColumnIndex, String newCsvRow) {
+        protected boolean updateCsvRecord(String filePath, String recordID, int idColumnIndex, String newCsvRow) {
         List<String> lines;
         try {
-            lines = Files.readAllLines(Paths.get(filePath));
+            Path path = Paths.get(filePath);
+            if (!Files.exists(path)) {
+                System.err.println("Error: File not found for update: " + filePath);
+                showAlert(Alert.AlertType.ERROR, "File Error", "Data file not found: " + filePath);
+                return false;
+            }
+            lines = Files.readAllLines(path);
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to read file: " + filePath);
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to read file: " + filePath + " - " + e.getMessage());
             System.out.println("Error reading file for update: " + e.getMessage());
             return false;
         }
@@ -340,26 +346,32 @@ public abstract class MainController {
         boolean updated = false;
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            String[] values = line.split(",");
+            String[] values = line.split(",", -1); // Use -1 to keep trailing empty fields
+            
             if (values.length > idColumnIndex && values[idColumnIndex].trim().equals(recordID)) {
-                lines.set(i, newCsvRow);
+                lines.set(i, newCsvRow); 
                 updated = true;
-                break;
+                break; 
             }
         }
 
         if (updated) {
             try {
-                Files.write(Paths.get(filePath), lines);
+                Files.write(Paths.get(filePath), lines); 
+                System.out.println("Successfully updated record '" + recordID + "' in " + filePath + " with: " + newCsvRow); // Added log
                 return true;
             } catch (IOException e) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Failed to write updates to file: " + filePath);
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to write updates to file: " + filePath + " - " + e.getMessage());
                 System.out.println("Error writing file for update: " + e.getMessage());
                 return false;
             }
+        } else {
+            System.err.println("Record ID '" + recordID + "' not found in " + filePath + " at column index " + idColumnIndex + " for update.");
+             showAlert(Alert.AlertType.WARNING, "Update Info", "Record ID '" + recordID + "' not found. No update was performed.");
         }
         return false;
     }
+
 
     protected boolean deleteCsvRecord(String filePath, String recordID, int idColumnIndex) {
         List<String> lines;

@@ -2,14 +2,15 @@
 package main;
 
 import java.io.File;
-import java.io.BufferedReader; 
-import java.io.FileReader;   
+import java.io.BufferedReader; // User's original import
+import java.io.FileReader;   // User's original import
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+// Import for LocalDate
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -20,11 +21,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+// Import for Stage
 
 public class PlantSceneController extends MainController {
 
     @FXML private Text pageTitle;
+
+    // Top Navigation Buttons (fx:id should match in plantScene.fxml)
     @FXML private Button homeButton;
     @FXML private Button gardenButton;
     @FXML private Button plantButton; 
@@ -48,11 +51,11 @@ public class PlantSceneController extends MainController {
     @FXML private Button addPlantButton;
     @FXML private Button updatePlantButton; 
 
-
+    // Fields to manage edit mode and the plant/care instruction being edited
     private Plant currentPlantToEdit;
     private CareInstruction currentCareInstructionToEdit;
     private boolean editMode = false;
-    private String originalPlantIDForEdit; // To store the ID of the plant when BEING edited
+    private String originalPlantIDForEdit; // To store the ID of the plant being edited
     private String originalCareInstruIDForEdit; // To store the ID of the care instruction WHEN being edited
     
     private Map<String, String> gardenDisplayNameToIdMap; 
@@ -75,6 +78,8 @@ public class PlantSceneController extends MainController {
             }
             MainController.currentGardenForPlantAdd = null; 
         }
+        
+        // If not in edit mode
         switchToMode(editMode); 
     }
 
@@ -101,7 +106,6 @@ public class PlantSceneController extends MainController {
         gardenName.setItems(FXCollections.observableArrayList(gardenDisplayList));
     }
 
-
     private void switchToMode(boolean isEditMode) {
         this.editMode = isEditMode;
         if (isEditMode) {
@@ -123,10 +127,14 @@ public class PlantSceneController extends MainController {
     
     // This method is called from GardenSceneController when an "Edit" button on a plant card is clicked
     public void populateFormForEdit(Plant plant, CareInstruction careInstruction) {
+        // Set to edit mode *before* populating
         this.currentPlantToEdit = plant;
         this.currentCareInstructionToEdit = careInstruction;
+        // Store original IDs for updating the correct CSV record
         this.originalPlantIDForEdit = plant.getPlantID();
         this.originalCareInstruIDForEdit = careInstruction.getCareInstruID();
+
+        // Populate Plant Info fields
         String gardenGid = plant.getGardenID();
         String displayGardenName = "";
         if (gardenDisplayNameToIdMap != null) { 
@@ -149,6 +157,7 @@ public class PlantSceneController extends MainController {
             datePlanted.setValue(null);
         }
 
+        // Populate Plant Care Instruction fields
         if (careInstruction != null) {
             wateringFreq.setText(careInstruction.getWateringFreq());
             sunlightReq.setText(careInstruction.getSunlightReq());
@@ -156,6 +165,7 @@ public class PlantSceneController extends MainController {
             fertilizingSched.setText(careInstruction.getFertilizingSched());
             toxicity.setText(careInstruction.getToxicity());
         }
+        // Switch button visibility for edit mode
         switchToMode(true); 
     }
 
@@ -164,7 +174,8 @@ public class PlantSceneController extends MainController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Plant Image");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("JPEG Images (*.jpg, *.jpeg)", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("JPEG Images (*.jpg, *.jpeg)", "*.jpg", "*.jpeg"),
+                new FileChooser.ExtensionFilter("PNG Images (*.png)", "*.png")
         );
 
         File selectedFile = fileChooser.showOpenDialog(this.stage); 
@@ -181,6 +192,7 @@ public class PlantSceneController extends MainController {
     
     @FXML
     private void handleUpdatePlantAction() { 
+        // This method should only handle updating an EXISTING plant and the editMode flag should be true when this button is clicked.
         if (editMode) { 
             updateExistingPlant(); 
         } else {
@@ -195,7 +207,6 @@ public class PlantSceneController extends MainController {
         if (gardenDisplayNameToIdMap != null && selectedGardenDisplayName != null) {
             actualGardenGid = gardenDisplayNameToIdMap.get(selectedGardenDisplayName);
         }
-
 
         if (actualGardenGid == null || actualGardenGid.isEmpty()) { 
             showAlert(Alert.AlertType.ERROR, "Error", "Please select a valid garden for the new plant."); 
@@ -227,9 +238,9 @@ public class PlantSceneController extends MainController {
         String newPlantID = generateNewID(plantFilePath, 1, "P-"); 
         String newCareInstruID = generateNewID(plantCareInstruFilePath, 0, "C-");  
 
-        /* Base from the care_instructions.csv format: 
-           careInstruID,wateringFreq,sunlightReq,soilType,fertilizingSched,toxicity
-           CSV Order for plant.csv: gardenId(G-XXXX),plantId(P-XXXX),careInstruId(C-XXXX),plantName,plantImgFilePath,growthStatus,healthStatus,datePlanted */
+        // Base from the care_instructions.csv format: 
+        // careInstruID,wateringFreq,sunlightReq,soilType,fertilizingSched,toxicity
+        // CSV Order for plant.csv: gardenId(G-XXXX),plantId,careInstruId,plantName,plantImgFilePath,growthStatus,healthStatus,datePlanted
         String plantInfo = String.join(",", 
                 actualGardenGid, 
                 newPlantID, 
@@ -248,12 +259,13 @@ public class PlantSceneController extends MainController {
                 fertilizingSchedString, 
                 toxicityString);
         
-        // Save to the CSV files
+        // Save to CSV files
         showAlertAndRegisterToTwoCSVs(
             plantInfo + "\n", plantFilePath, 
             plantCareInfo + "\n", plantCareInstruFilePath,  
             "Plant '" + plantNameString + "' added successfully to " + selectedGardenDisplayName + "!", 
             () -> { 
+                // This will reset editMode and button visibility
                 try {
                     loadScene(gardenPath); 
                 } catch (IOException e) {
@@ -265,28 +277,29 @@ public class PlantSceneController extends MainController {
     }
     
     // Handles the logic for updating the existing plant
-    private void updateExistingPlant() { 
+        private void updateExistingPlant() { 
+        // Ensure we are in edit mode and have the necessary data displayed
         if (currentPlantToEdit == null || currentCareInstructionToEdit == null || originalPlantIDForEdit == null || originalCareInstruIDForEdit == null) { 
-            showAlert(Alert.AlertType.ERROR, "Error", "No plant data to update. Editing context might have been lost."); 
+            showAlert(Alert.AlertType.ERROR, "Error", "No plant data to update. Editing context might have been lost.");
             return; 
         }
         
         // Get current values from the form fields like from the My Garden Tab
         String selectedGardenDisplayName = gardenName.getValue(); 
         String actualGardenGid = null;
-        if (gardenDisplayNameToIdMap != null && selectedGardenDisplayName != null) {
+        if (gardenDisplayNameToIdMap != null && selectedGardenDisplayName != null) { // gardenDisplayNameToIdMap is populated in initialize
             actualGardenGid = gardenDisplayNameToIdMap.get(selectedGardenDisplayName);
         }
 
         if (actualGardenGid == null || actualGardenGid.isEmpty()) { 
-             showAlert(Alert.AlertType.ERROR, "Error", "Garden Name cannot be empty or invalid for update."); 
+             showAlert(Alert.AlertType.ERROR, "Error", "Garden Name cannot be empty or invalid for update.");
              return; 
         }
 
         String plantImgFilePathString = plantImgFilePath.getText();   
         String plantNameString = plantName.getText();
-        String growthStatusString = growthStatus.getText();
-        String healthStatusString = healthStatus.getText();
+        String growthStatusString = growthStatus.getText(); // <<< Ensures this gets the LATEST text from your form
+        String healthStatusString = healthStatus.getText(); // <<< Ensures this gets the LATEST text from your form
         LocalDate datePlantedValue = datePlanted.getValue();
         String wateringFreqString = wateringFreq.getText();
         String sunlightReqString = sunlightReq.getText();
@@ -299,19 +312,20 @@ public class PlantSceneController extends MainController {
             growthStatusString.isEmpty() || healthStatusString.isEmpty() || datePlantedValue == null 
             || wateringFreqString.isEmpty() || sunlightReqString.isEmpty() || soilTypeString.isEmpty() 
             || fertilizingSchedString.isEmpty() || toxicityString.isEmpty()) { 
-            showAlert(Alert.AlertType.ERROR, "Error", "Please fill in all required fields for update (except image, which is optional)."); 
+            showAlert(Alert.AlertType.ERROR, "Error", "Please fill in all required fields for update (except image, which is optional).");
             return; 
         }
         String datePlantedString = datePlantedValue.format(csvDateFormatter);
 
+        // CSV Order for plant.csv: gardenId(G-XXXX),plantId,careInstruId,plantName,plantImgFilePath,growthStatus,healthStatus,datePlanted
         String updatedPlantInfo = String.join(",", 
                 actualGardenGid, 
                 originalPlantIDForEdit, 
                 originalCareInstruIDForEdit, 
                 plantNameString,
                 plantImgFilePathString, 
-                growthStatusString, 
-                healthStatusString, 
+                growthStatusString,  // Using the new value
+                healthStatusString,  // Using the new value
                 datePlantedString);
         
         String updatedCareInfo = String.join(",", 
@@ -322,24 +336,33 @@ public class PlantSceneController extends MainController {
                 fertilizingSchedString, 
                 toxicityString);
         
-        // Update the records in CSV files
-        boolean plantUpdated = updateCsvRecord(plantFilePath, originalPlantIDForEdit, 1, updatedPlantInfo); // Assuming plantID is at index 1 in plant.csv
-        boolean careUpdated = updateCsvRecord(plantCareInstruFilePath, originalCareInstruIDForEdit, 0, updatedCareInfo); // Assuming careInstruID is at index 0
+        // Update records in CSV files
+        // For plant.csv, plantId is at index 1 (0-indexed), assuming gardenId is at index 0
+        boolean plantUpdated = updateCsvRecord(plantFilePath, originalPlantIDForEdit, 1, updatedPlantInfo); 
+        boolean careUpdated = updateCsvRecord(plantCareInstruFilePath, originalCareInstruIDForEdit, 0, updatedCareInfo); 
         
         if (plantUpdated && careUpdated) { 
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Plant '" + plantNameString + "' updated successfully!"); 
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Plant '" + plantNameString + "' updated successfully!");
             try {
-                loadScene(gardenPath); 
+                loadScene(gardenPath);
             } catch (IOException e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Navigation Error", "Could not return to garden view.");
             }
         } else {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to update plant details. One or more records not found or write error."); 
+            String errorMessage = "Failed to update plant details. ";
+            if (!plantUpdated) errorMessage += "Plant data in plant.csv might not have been updated. ";
+            if (!careUpdated && currentCareInstructionToEdit != null && 
+                currentCareInstructionToEdit.getCareInstruID() != null && 
+                !currentCareInstructionToEdit.getCareInstruID().isEmpty()) {
+                 errorMessage += "Plant care instructions might not have been updated.";
+            }
+            showAlert(Alert.AlertType.ERROR, "Error", errorMessage.trim() + " Record not found or write error.");
         }
-        // Clear all the text fields and reset the form 
-        switchToMode(false); 
+        // Clear all the text fields and reset the form
+        switchToMode(false);
     }
+
         
     private void clearPlantFormInternal() { 
         gardenName.setValue(null);

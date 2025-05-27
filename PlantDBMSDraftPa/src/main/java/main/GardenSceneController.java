@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -39,6 +40,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -234,7 +236,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
             String lowerSearchTerm = searchTerm.trim().toLowerCase();
             plantStream = plantStream.filter(p -> (p.getPlantName() != null && p.getPlantName().toLowerCase().contains(lowerSearchTerm)) ||
-                                                (p.getPlantID() != null && p.getPlantID().toLowerCase().contains(lowerSearchTerm)) );
+                                                 (p.getPlantID() != null && p.getPlantID().toLowerCase().contains(lowerSearchTerm)) );
         }
         return plantStream.collect(Collectors.toList());
     }
@@ -267,10 +269,8 @@ public class GardenSceneController extends MainController implements javafx.fxml
                     break;
             }
         }
-
         // Explicitly set maxCols to 4 for 4 plants per row
         int maxCols = 4;
-
         int col = 0;
         int row = 0;
         for (Plant plant : plants) {
@@ -299,7 +299,6 @@ public class GardenSceneController extends MainController implements javafx.fxml
         card.setStyle("-fx-background-color: #ffffff; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-background-radius: 5; -fx-border-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.1, 0, 1);");
         card.setPrefSize(158, 260);
         card.setAlignment(Pos.TOP_LEFT);
-
         ImageView imageView = new ImageView();
         try {
             String imgPath = plant.getPlantImg();
@@ -341,19 +340,16 @@ public class GardenSceneController extends MainController implements javafx.fxml
         VBox imageContainer = new VBox(imageView);
         imageContainer.setAlignment(Pos.CENTER);
         imageContainer.setPrefHeight(105);
-        
         Label nameLabel = new Label(plant.getPlantName() != null && !plant.getPlantName().trim().isEmpty() ? plant.getPlantName() : "Unnamed Plant");
         nameLabel.setFont(Font.font("Century Gothic Bold", 15));
         nameLabel.setTextFill(Color.web("#333333"));
-        nameLabel.setWrapText(true); 
+        nameLabel.setWrapText(true);
         nameLabel.setMaxWidth(142); 
-
         Label idLabel = new Label("ID: " + (plant.getPlantID() != null && !plant.getPlantID().trim().isEmpty() ? plant.getPlantID() : "N/A"));
         idLabel.setFont(Font.font("System", 10));
         idLabel.setTextFill(Color.web("#666666"));
         idLabel.setWrapText(true); 
         idLabel.setMaxWidth(142); 
-
         String datePlantedDisplay = "N/A";
         if (plant.getDatePlanted() != null) {
             try {
@@ -365,9 +361,8 @@ public class GardenSceneController extends MainController implements javafx.fxml
         Label dateLabel = new Label("Planted: " + datePlantedDisplay);
         dateLabel.setFont(Font.font("System", 10));
         dateLabel.setTextFill(Color.web("#666666"));
-        dateLabel.setWrapText(true); 
+        dateLabel.setWrapText(true);
         dateLabel.setMaxWidth(142); 
-
         Label viewDetailsLabel = new Label("View Details");
         viewDetailsLabel.setUnderline(true);
         viewDetailsLabel.setTextFill(Color.SEAGREEN);
@@ -387,6 +382,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
                 controller.populateDetails(plant, ci);
                 Stage detailsStage = new Stage();
                 detailsStage.initModality(Modality.APPLICATION_MODAL);
+            
                 detailsStage.initOwner(this.stage); 
                 String titleName = (plant.getPlantName() != null && !plant.getPlantName().trim().isEmpty()) ? plant.getPlantName() : "Plant";
                 detailsStage.setTitle("Plant Details: " + titleName);
@@ -409,14 +405,13 @@ public class GardenSceneController extends MainController implements javafx.fxml
                 controller.setStage(this.stage);
                 controller.populateFormForEdit(plant, ci);
                 String titleName = (plant.getPlantName() != null && !plant.getPlantName().trim().isEmpty()) ? plant.getPlantName() : "Plant";
-                this.stage.setTitle("Edit Plant: " + titleName); 
+                this.stage.setTitle("Edit Plant: \n" + titleName); 
                 this.stage.setScene(new Scene(root));
             } catch (IOException ex) {
                 ex.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "FXML Error", "Could not open the edit plant form: " + ex.getMessage());
             }
         });
-
         Button deleteButton = new Button("Delete");
         styleActionButton(deleteButton);
         deleteButton.setOnAction(e -> {
@@ -427,6 +422,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
             confirmDelete.setHeaderText(null);
             confirmDelete.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.YES) {
+            
                     boolean plantDeleted = deleteCsvRecord(plantFilePath, plant.getPlantID(), 1);
                     boolean careDeleted = false;
                     if (plant.getCareInstruID() != null && !plant.getCareInstruID().trim().isEmpty()){
@@ -458,7 +454,6 @@ public class GardenSceneController extends MainController implements javafx.fxml
             if (plant == null) return;
             handleMovePlant(plant);
         });
-
         HBox buttonBox = new HBox(5, editButton, deleteButton, moveButton);
         buttonBox.setAlignment(Pos.CENTER);
         
@@ -532,7 +527,8 @@ public class GardenSceneController extends MainController implements javafx.fxml
             String plantID = plantToMove.getPlantID();
             String careInstruID = plantToMove.getCareInstruID() != null ? plantToMove.getCareInstruID() : "";
             String name = plantToMove.getPlantName() != null ? plantToMove.getPlantName() : "";
-            String img = plantToMove.getPlantImg() != null ? plantToMove.getPlantImg() : "";
+            String img = plantToMove.getPlantImg() 
+                        != null ? plantToMove.getPlantImg() : "";
             String growth = plantToMove.getGrowthStatus() != null ? plantToMove.getGrowthStatus() : "";
             String health = plantToMove.getHealthStatus() != null ? plantToMove.getHealthStatus() : "";
             String datePlantedStr = plantToMove.getDatePlanted() != null ?
@@ -623,7 +619,8 @@ public class GardenSceneController extends MainController implements javafx.fxml
         Tab tab = new Tab(displayTabTitle);
         tab.setUserData(gardenID);
         AnchorPane rootAnchor = new AnchorPane();
-        rootAnchor.setPrefSize(800, 489);
+        rootAnchor.setPrefSize(800, 520); // MODIFIED: Increased height from 489 to 520
+
         VBox topSectionVBox = new VBox(10);
         topSectionVBox.setPadding(new Insets(10, 10, 5, 10));
         
@@ -639,6 +636,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
         gardenIdDisplayLabel.setFont(Font.font("System", 12));
         gardenIdDisplayLabel.setTextFill(Color.SLATEGRAY);
         nameAndIdLine.getChildren().addAll(gardenNameDisplayLabel, gardenIdDisplayLabel);
+
         Label dateAddedDisplayLbl = new Label("Date Added: " + dateAddedString);
         dateAddedDisplayLbl.setFont(Font.font("System", 14));
         
@@ -653,6 +651,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
         tabSortPlantsComboBox.getItems().addAll("Sort by Name (A-Z)", "Sort by Name (Z-A)", "Sort by Date Planted (Newest)", "Sort by Date Planted (Oldest)");
         tabSortPlantsComboBox.setPromptText("Sort Plants By...");
         tabSortPlantsComboBox.setPrefHeight(30);
+        tabSortPlantsComboBox.setPrefWidth(180); 
         
         Button addPlantToThisGardenBtn = new Button("+ Add Plant");
         addPlantToThisGardenBtn.setStyle("-fx-background-color: #8CC152; -fx-text-fill: white; -fx-font-weight: bold;");
@@ -669,6 +668,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
         deleteGardenBtn.setPrefHeight(30);
         
         gardenAndPlantActionsHBox.getChildren().addAll(tabSortPlantsComboBox, addPlantToThisGardenBtn, editGardenBtn, deleteGardenBtn);
+
         editGardenBtn.setOnAction(edit -> {
             openAddGardenTab();
             gardenNameFieldForForm.setText(gardenNameVal);
@@ -684,7 +684,6 @@ public class GardenSceneController extends MainController implements javafx.fxml
             updateGardenButton.setDisable(false);
             updateGardenButton.setVisible(true);
         });
-        
         deleteGardenBtn.setOnAction(delete -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Garden");
@@ -694,6 +693,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
                 if (response == ButtonType.OK) {
                     deleteGardenFromCSV(gardenID);
                     List<Plant> plantsInGarden = getPlantsForGarden(gardenID, ""); 
+
                     for (Plant p : plantsInGarden) {
                         deleteCsvRecord(plantFilePath, p.getPlantID(), 1);
                         deleteCsvRecord(plantCareInstruFilePath, p.getCareInstruID(), 0);
@@ -703,7 +703,6 @@ public class GardenSceneController extends MainController implements javafx.fxml
                 }
             });
         });
-
         addPlantToThisGardenBtn.setOnAction(addplant -> {
             try {
                 MainController.currentGardenForPlantAdd = gardenID;
@@ -713,7 +712,6 @@ public class GardenSceneController extends MainController implements javafx.fxml
                 showAlert(Alert.AlertType.ERROR, "FXML Loading Error", "Could not open the 'Add Plant' form: " + e.getMessage());
             }
         });
-
         tabSortPlantsComboBox.setOnAction(event -> {
             if (tab.isSelected()) {
                 GridPane currentGrid = plantGridFromTab(tab);
@@ -735,7 +733,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
         
         Button searchPlantsButton = new Button("Search");
         searchPlantsButton.setStyle("-fx-background-color: #8CC152; -fx-text-fill: white; -fx-font-weight: bold;");
-        searchPlantsButton.setFont(Font.font("Century Gothic", 10));
+        searchPlantsButton.setFont(Font.font("Century Gothic", 12));
         searchPlantsButton.setPrefHeight(30);
         searchPlantsField.setOnAction(e -> searchPlantsButton.fire());
         searchPlantsButton.setOnAction(e -> {
@@ -750,17 +748,30 @@ public class GardenSceneController extends MainController implements javafx.fxml
         divider1.setStroke(Color.web("#A0D468"));
         divider1.setStrokeWidth(1);
         topSectionVBox.getChildren().addAll(gardenInfoAndActionsHeader, divider1, searchControlsHBox);
+
         GridPane plantsDisplayGrid = new GridPane();
         plantsDisplayGrid.setPadding(new Insets(10));
         plantsDisplayGrid.setHgap(10);
         plantsDisplayGrid.setVgap(10);
-        plantsDisplayGrid.setPrefWidth(780);
+        // plantsDisplayGrid.setPrefWidth(780); // This can be kept or removed if ScrollPane's fitToWidth is True
+
+        plantsDisplayGrid.getColumnConstraints().clear(); 
+        for (int i = 0; i < 4; i++) { 
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(25); 
+            colConst.setHalignment(javafx.geometry.HPos.CENTER); 
+            plantsDisplayGrid.getColumnConstraints().add(colConst);
+        }
+
         ScrollPane scrollPane = new ScrollPane(plantsDisplayGrid);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
         VBox mainContentVBox = new VBox(5, topSectionVBox, scrollPane); 
+        mainContentVBox.setPadding(new Insets(10)); 
+
         AnchorPane.setTopAnchor(mainContentVBox, 0.0);
         AnchorPane.setBottomAnchor(mainContentVBox, 0.0);
         AnchorPane.setLeftAnchor(mainContentVBox, 0.0);
@@ -848,6 +859,7 @@ public class GardenSceneController extends MainController implements javafx.fxml
                     refreshTabs(gardenFilePath);
                     for (Tab t : gardenTabPane.getTabs()) {
                         if (t.getUserData() != null && t.getUserData().equals(editingGardenID)) {
+                        
                             gardenTabPane.getSelectionModel().select(t);
                             break;
                         }
