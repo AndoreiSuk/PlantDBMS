@@ -1,0 +1,7 @@
+gardenId,plantId,plantImgFilePath,plantName,growthStatus,healthStatus,datePlanted,careInstruId
+G-0001,P-0001,https://example.com/tomato.jpg,Tomato,Growing,Healthy,2023-01-01,C-0001
+G-0001,P-0002,https://example.com/cucumber.jpg,Cucumber,Growing,Healthy,2023-01-02,C-0002
+G-0001,P-0003,https://example.com/lettuce.jpg,Lettuce,Growing,Healthy,2023-01-03,C-0003
+G-0001,P-0004,https://example.com/carrot.jpg,Carrot,Growing,Healthy,2023-01-04,C-0004
+G-0001,P-0005,https://example.com/bell_pepper.jpg,Bell Pepper,Growing,Healthy,2023-01-05,C-0005
+G-0001,P-0006,https://example.com/eggplant.jpg,Eggplant,Growing,Healthy,2023-01-06,C-0006
