@@ -22,7 +22,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #EFF3ED;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GardenSceneController">
    <children>
-      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f4f4f4" height="519.0" layoutX="75.0" layoutY="107.0" stroke="TRANSPARENT" strokeType="INSIDE" width="850.0">
+      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f4f4f4" height="592.0" layoutX="75.0" layoutY="107.0" stroke="TRANSPARENT" strokeType="INSIDE" width="850.0">
          <effect>
             <DropShadow height="47.96" radius="21.725" width="40.94">
                <color>
@@ -73,7 +73,7 @@
       </GridPane>
       <Line endX="-0.39996337890625" endY="-7.62939453125E-6" layoutX="820.0" layoutY="72.0" startX="-100.0" stroke="#8bc34a" strokeWidth="3.0" />
       
-      <TabPane fx:id="gardenTabPane" layoutX="75.0" layoutY="163.0" prefHeight="506.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="gardenTabPane" layoutX="75.0" layoutY="163.0" prefHeight="536.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
             <Tab fx:id="addGardenTab" text="Add New Garden">
                <content>

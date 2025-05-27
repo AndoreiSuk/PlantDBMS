@@ -103,7 +103,7 @@
                      <GridPane.margin><Insets top="5.0" /></GridPane.margin>
                   </Text>
                   <ComboBox fx:id="gardenName" prefHeight="26.0" prefWidth="302.0" promptText="Select Garden" GridPane.rowIndex="1" />
-                  <Text fill="#8bc34a" strokeType="OUTSIDE" strokeWidth="0.0" text="Plant Image Filepath (.jpg, .png)" GridPane.rowIndex="2">
+                  <Text fill="#8bc34a" strokeType="OUTSIDE" strokeWidth="0.0" text="Plant Image Filepath (.jpg)" GridPane.rowIndex="2">
                      <font><Font name="System Bold" size="14.0" /></font>
                      <GridPane.margin><Insets top="5.0" /></GridPane.margin>
                   </Text>
