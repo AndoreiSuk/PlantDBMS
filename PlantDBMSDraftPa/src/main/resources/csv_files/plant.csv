@@ -1,13 +1,13 @@
 gardenId,plantId,careInstruId,plantName,plantImgFilePath,growthStatus,healthStatus,datePlanted
 
 
-G-0004,P-0001,C-0001,Blueberry,D:\Users\User\Downloads\Blueberries.jpg,Growing,Healthy,2025-05-27
-G-0004,P-0002,C-0002,Apple,D:\Users\User\Downloads\Apple.jpg,Fruiting,Healthy,2025-05-27
-G-0004,P-0003,C-0003,Orange,D:\Users\User\Downloads\Orange.jpg,Fruiting,Healthy,2025-05-27
-G-0003,P-0004,C-0004,Mango,D:\Users\User\Downloads\Mango.jpg,Fruiting,Healthy,2025-05-28
-G-0004,P-0005,C-0005,Watermelon,D:\Users\User\Downloads\Watermelon.jpg,Growing,Healthy,2025-05-28
-G-0003,P-0006,C-0006,Durian,D:\Users\User\Downloads\Durian.jpg,Growing,Healthy,2025-05-25
-G-0004,P-0007,C-0007,Avocado,D:\Users\User\Downloads\Avocado.jpg,Growing,Healthy,2025-05-29
-G-0003,P-0008,C-0008,Pineapple,D:\Users\User\Downloads\Pineapple.jpg,Grown,Healthy,2025-05-28
-G-0003,P-0009,C-0009,Papaya,D:\Users\User\Downloads\Papaya.jpg,Grown,Healthy,2025-05-28
-G-0004,P-0010,C-0010,Banana,D:\Users\User\Downloads\Banana.jpg,Growing,Healthy,2025-05-28
+
+
+G-0004,P-0001,C-0001,Apple,D:\Users\User\Downloads\Apple.jpg,Growing,Healthy,2025-05-28
+G-0004,P-0002,C-0002,Orange,D:\Users\User\Downloads\Orange.jpg,Fruiting,Healthy,2025-05-27
+G-0004,P-0003,C-0003,Blueberry,D:\Users\User\Downloads\Blueberries.jpg,Fruiting,Healthy,2025-05-28
+G-0004,P-0004,C-0004,Mango,D:\Users\User\Downloads\Mango.jpg,Growing,Healthy,2025-05-28
+G-0004,P-0005,C-0005,Watermelon,D:\Users\User\Downloads\Watermelon.jpg,Growing,Healthy,2025-05-27
+G-0004,P-0006,C-0006,Durian,D:\Users\User\Downloads\Durian.jpg,Grown,Healthy,2025-05-27
+G-0004,P-0007,C-0007,Avocado,D:\Users\User\Downloads\Avocado.jpg,Fruiting,Healthy,2025-05-27
+G-0004,P-0008,C-0008,Pineapple,D:\Users\User\Downloads\Pineapple.jpg,Growing,Healthy,2025-05-27

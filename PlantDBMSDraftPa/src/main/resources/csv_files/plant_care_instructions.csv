@@ -1,12 +1,11 @@
 careInstructionId,waterFrequency,sunlightReq,soilType,fertilizingSched,toxicity
 
-C-0001,One to Two times per week,Full Sun,Well-draining soil,Month of spring,None
-C-0002,Weekly,Full Sun,Well-drained loamy soil,Annually in early spring ,None
-C-0003,Every 7-10 days,Full Sun,Sandy loam, well draining,3 to 4 times a year,None
-C-0004,Weekly,Full Sun,Well-draining Soil,Every 6 to 8 weeks during growing season,None
-C-0005,1 to 2 inches per week,Full sun,Sandy, Well-drained soil,During planting and flowering,None
-C-0006,Every 2 to 3 days,Full sun,Depp, well-drained loamy soil,Every 2 to 3 months,None
-C-0007,2 to 3 times per week,Full Sun,Well-draining, sandy loam,Every 3 months,Mildly toxic to pets
-C-0008,Weekly,Full sun,Well-drained, sandy or loamy,Every 6 to 8 weeks ,None
-C-0009,1 to 2 times per week,Full sun,Light, well-drained soil,Monthly,None
-C-0010,1 to 2 inches per week,Full sun,Rich, well-drained loamy soil,Monthly ,None
+
+C-0001,Weekly,Full Sun,Well-drained loamy soil,Annually in early spring,None
+C-0002,Every 7-10 days,Full Sun,Sandy loam, well-draining,3-4 times a year ,None
+C-0003,1-2 inches per week,Full sun,Acidic, Well-drained soil,Early spring and after harvest,None
+C-0004,Weekly,Full sun,Well-draining,Every 6-8 weeks during growing season,None
+C-0005,1-2 inches per week,Full sun,Sandy, well-drained soil,At planting and during flowering,None
+C-0006,Every 2-3 days if young, weekly if mature,Full sun,Deep, well-drained loamy soil,Every 2-3 months,None
+C-0007,2-3 times per week,Full sun,Well-draining, sandy loam,Every 3 months,Mildly toxic to pets
+C-0008,2-3 times per week,Full sun,Well-draining, sandy or loamy,Every 6-8 weeks,None
